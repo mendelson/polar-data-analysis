@@ -1,4 +1,4 @@
 *.pyc
-*.yml
+*/*.yml
 */__pycache__/*
 data/*

@@ -2,7 +2,7 @@
 
 from __future__ import print_function
 
-from utils import load_config, save_config, pretty_print_json
+from utils import load_config, save_config, pretty_print_json, save_json_to_file
 from accesslink import AccessLink
 
 
@@ -55,6 +55,7 @@ class PolarAccessLinkExample(object):
         user_info = self.accesslink.users.get_information(user_id=self.config["user_id"],
                                                           access_token=self.config["access_token"])
         pretty_print_json(user_info)
+        save_json_to_file(user_info, 'user_data.json')
 
     def check_available_data(self):
         available_data = self.accesslink.pull_notifications.list()
@@ -65,6 +66,7 @@ class PolarAccessLinkExample(object):
 
         print("Available data:")
         pretty_print_json(available_data)
+        save_json_to_file(available_data, 'available_data.json')
 
         for item in available_data["available-user-data"]:
             if item["data-type"] == "EXERCISE":
@@ -103,8 +105,9 @@ class PolarAccessLinkExample(object):
 
             print("Exercise summary:")
             pretty_print_json(exercise_summary)
+            save_json_to_file(exercise_summary, 'exercises_data.json')
 
-        transaction.commit()
+        # transaction.commit()
 
     def get_daily_activity(self):
         transaction = self.accesslink.daily_activity.create_transaction(user_id=self.config["user_id"],
@@ -120,8 +123,9 @@ class PolarAccessLinkExample(object):
 
             print("Activity summary:")
             pretty_print_json(activity_summary)
+            save_json_to_file(activity_summary, f'daily_activity_data_{activity_summary["date"]}.json')
 
-        transaction.commit()
+        # transaction.commit()
 
     def get_physical_info(self):
         transaction = self.accesslink.physical_info.create_transaction(user_id=self.config["user_id"],
@@ -137,8 +141,9 @@ class PolarAccessLinkExample(object):
 
             print("Physical info:")
             pretty_print_json(physical_info)
+            save_json_to_file(physical_info, 'physical_data.json')
 
-        transaction.commit()
+        # transaction.commit()
 
 
 if __name__ == "__main__":

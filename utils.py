@@ -3,6 +3,7 @@
 import json
 import yaml
 
+data_folder = 'data/'
 
 def load_config(filename):
     """Load configuration from a yaml file"""
@@ -18,3 +19,8 @@ def save_config(config, filename):
 
 def pretty_print_json(data):
     print(json.dumps(data, indent=4, sort_keys=True))
+
+def save_json_to_file(data, filename):
+    with open(data_folder + filename, 'a+') as outfile:
+        outfile.write(str(data))
+        outfile.write('\n')

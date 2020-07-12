@@ -2,3 +2,4 @@
 */*.yml
 */__pycache__/*
 data/*
+*.html

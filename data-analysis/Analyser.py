@@ -84,7 +84,12 @@ class Analyser(object):
         df = self.get_sessions_in_timespan(df, start_date, end_date)
         df.reset_index(inplace=True)
         df.rename(columns={'index': 'i-th session (0 started)'}, inplace=True)
+
+        # Dealing with strings and ints
+        df = df.replace(const.empty_value, 0)
         df = df.sort_values(by='distance', ascending=False, ignore_index=True).head(how_many)
+        df = df.replace(0, const.empty_value)
+
         utils.show_dataframe_in_web(df, f'{how_many} longest sessions')
 
     def show_top_time_consuming(self, sport, how_many, start_date, end_date):
@@ -92,7 +97,12 @@ class Analyser(object):
         df = self.get_sessions_in_timespan(df, start_date, end_date)
         df.reset_index(inplace=True)
         df.rename(columns={'index': 'i-th session (0 started)'}, inplace=True)
+
+        # Dealing with strings and ints
+        df = df.replace(const.empty_value, 0)
         df = df.sort_values(by='duration', ascending=False, ignore_index=True).head(how_many)
+        df = df.replace(0, const.empty_value)
+
         utils.show_dataframe_in_web(df, f'{how_many} most time consuming sessions')
 
     def show_top_time_in_distance(self, sport, how_many, distance, start_date, end_date):
@@ -101,7 +111,12 @@ class Analyser(object):
         df = self.get_sessions_in_timespan(df, start_date, end_date)
         df.reset_index(inplace=True)
         df.rename(columns={'index': 'i-th session (0 started)'}, inplace=True)
+
+        # Dealing with strings and ints
+        df = df.replace(const.empty_value, 0)
         df = df.sort_values(by=column, ascending=True, ignore_index=True).head(how_many)
+        df = df.replace(0, const.empty_value)
+
         utils.show_dataframe_in_web(df, f'Best {distance}km time sessions')
 
     def show_top_avg_speeds(self, sport, how_many, start_date, end_date):
@@ -109,7 +124,12 @@ class Analyser(object):
         df = self.get_sessions_in_timespan(df, start_date, end_date)
         df.reset_index(inplace=True)
         df.rename(columns={'index': 'i-th session (0 started)'}, inplace=True)
+        
+        # Dealing with strings and ints
+        df = df.replace(const.empty_value, 0)
         df = df.sort_values(by='avg_speed', ascending=False, ignore_index=True).head(how_many)
+        df = df.replace(0, const.empty_value)
+
         utils.show_dataframe_in_web(df, f'Best {how_many} average speed in session')
 
     def show_top_avg_heart_rates(self, sport, how_many, start_date, end_date):
@@ -120,7 +140,7 @@ class Analyser(object):
 
         # Dealing with strings and ints
         df = df.replace(const.empty_value, 0)
-        df = df.sort_values(by='avg_heart_rate', ascending=False, ignore_index=True).head(how_many)
+        df = df.sort_values(by=['avg_heart_rate', 'avg_heart_rate_as_percentage', 'max_heart_rate', 'max_heart_rate_as_percentage'], ascending=False, ignore_index=True).head(how_many)
         df = df.replace(0, const.empty_value)
 
         utils.show_dataframe_in_web(df, f'{how_many} highest average heart rates in session')

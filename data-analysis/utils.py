@@ -222,3 +222,31 @@ def get_date_from_keyboard():
 def get_end_of_day(day):
     end_of_day = datetime(day.year, day.month, day.day, 23, 59, 59, 999999)
     return end_of_day
+
+def duration_to_timedelta(durations):
+        dates = []
+
+        for duration in durations:
+            try:
+                dt = datetime.strptime(duration, '%H:%M:%S.%f')
+            except:
+                try:
+                    dt = datetime.strptime(duration, '%H:%M:%S')
+                except:
+                    try:
+                        dt = datetime.strptime(duration, '%d days, %H:%M:%S.%f')
+                    except:
+                        dt = datetime.strptime(duration, '%d days, %H:%M:%S')
+
+            td = timedelta(hours=dt.hour, minutes=dt.minute, seconds=dt.second)
+            dates.append(td)
+
+        return dates
+
+def timedelta_to_duration(tds):
+    dates = []
+
+    for td in tds:
+        dates.append(str(td))
+
+    return dates

@@ -4,12 +4,14 @@ from time import sleep
 from datetime import datetime
 import constants as const
 import utils
+import os
 
 def show_main_menu():
     utils.clear()
     print('Choose an option:')
     print(' 1 => Go to analysis')
-    print(' 2 => Build database')
+    print(' 2 => Check for new data')
+    print(' 3 => Build database')
     print('---------------')
     print('-1 => Exit')
 
@@ -115,29 +117,34 @@ def running_menu(sport):
         print(' 3 => Get best times in distance')
         print(' 4 => Get highest average speeds')
         print(' 5 => Get highest average heart rates')
+        print(' 6 => Get location stats')
         print('---------------')
         print('-1 => Go back')
-        best = int(input('> '))
+        option = int(input('> '))
 
-        if best == 0:
+        if option == 0:
             an.show_all(sport, start_date, end_date)
-        elif best == 1:
+        elif option == 1:
             amount = get_how_many()
             an.show_top_distances(sport, amount, start_date, end_date)
-        elif best == 2:
+        elif option == 2:
             amount = get_how_many()
             an.show_top_time_consuming(sport, amount, start_date, end_date)
-        elif best == 3:
+        elif option == 3:
             amount = get_how_many()
             distance = int(input('Choose distance (5, 10, 15 or 21 km): '))
             an.show_top_time_in_distance(sport, amount, distance, start_date, end_date)
-        elif best == 4:
+        elif option == 4:
             amount = get_how_many()
             an.show_top_avg_speeds(sport, amount, start_date, end_date)
-        elif best == 5:
+        elif option == 5:
             amount = get_how_many()
             an.show_top_avg_heart_rates(sport, amount, start_date, end_date)
-        elif best == -1:
+        elif option == 6:
+            an.show_landmarks_stats(sport, start_date, end_date)
+            an.show_state_stats(sport, start_date, end_date)
+            an.show_country_stats(sport, start_date, end_date)
+        elif option == -1:
             quit_menu = True
         else:
             show_invalid_option()
@@ -157,19 +164,24 @@ def standard_sport_menu(sport):
         print(' 0 => Get all sessions')
         print(' 1 => Get most time consuming sessions')
         print(' 2 => Get highest average heart rates')
+        print(' 3 => Get location stats')
         print('---------------')
         print('-1 => Go back')
-        best = int(input('> '))
+        option = int(input('> '))
 
-        if best == 0:
+        if option == 0:
             an.show_all(sport, start_date, end_date)
-        elif best == 1:
+        elif option == 1:
             amount = get_how_many()
             an.show_top_time_consuming(sport, amount, start_date, end_date)
-        elif best == 2:
+        elif option == 2:
             amount = get_how_many()
             an.show_top_avg_heart_rates(sport, amount, start_date, end_date)
-        elif best == -1:
+        elif option == 3:
+            an.show_landmarks_stats(sport, start_date, end_date)
+            an.show_state_stats(sport, start_date, end_date)
+            an.show_country_stats(sport, start_date, end_date)
+        elif option == -1:
             quit_menu = True
         else:
             show_invalid_option()
@@ -191,25 +203,30 @@ def distance_based_sport_menu(sport):
         print(' 2 => Get most time consuming sessions')
         print(' 3 => Get highest average speeds')
         print(' 4 => Get highest average heart rates')
+        print(' 5 => Get location stats')
         print('---------------')
         print('-1 => Go back')
-        best = int(input('> '))
+        option = int(input('> '))
 
-        if best == 0:
+        if option == 0:
             an.show_all(sport, start_date, end_date)
-        elif best == 1:
+        elif option == 1:
             amount = get_how_many()
             an.show_top_distances(sport, amount, start_date, end_date)
-        elif best == 2:
+        elif option == 2:
             amount = get_how_many()
             an.show_top_time_consuming(sport, amount, start_date, end_date)
-        elif best == 3:
+        elif option == 3:
             amount = get_how_many()
             an.show_top_avg_speeds(sport, amount, start_date, end_date)
-        elif best == 4:
+        elif option == 4:
             amount = get_how_many()
             an.show_top_avg_heart_rates(sport, amount, start_date, end_date)
-        elif best == -1:
+        elif option == 5:
+            an.show_landmarks_stats(sport, start_date, end_date)
+            an.show_state_stats(sport, start_date, end_date)
+            an.show_country_stats(sport, start_date, end_date)
+        elif option == -1:
             quit_menu = True
         else:
             show_invalid_option()
@@ -232,29 +249,34 @@ def cycling_menu(sport):
         print(' 3 => Get best times in distance')
         print(' 4 => Get highest average speeds')
         print(' 5 => Get highest average heart rates')
+        print(' 6 => Get location stats')
         print('---------------')
         print('-1 => Go back')
-        best = int(input('> '))
+        option = int(input('> '))
 
-        if best == 0:
+        if option == 0:
             an.show_all(sport, start_date, end_date)
-        elif best == 1:
+        elif option == 1:
             amount = get_how_many()
             an.show_top_distances(sport, amount, start_date, end_date)
-        elif best == 2:
+        elif option == 2:
             amount = get_how_many()
             an.show_top_time_consuming(sport, amount, start_date, end_date)
-        elif best == 3:
+        elif option == 3:
             amount = get_how_many()
             distance = int(input('Choose distance (10, 30, 60 or 100 km): '))
             an.show_top_time_in_distance(sport, amount, distance, start_date, end_date)
-        elif best == 4:
+        elif option == 4:
             amount = get_how_many()
             an.show_top_avg_speeds(sport, amount, start_date, end_date)
-        elif best == 5:
+        elif option == 5:
             amount = get_how_many()
             an.show_top_avg_heart_rates(sport, amount, start_date, end_date)
-        elif best == -1:
+        elif option == 6:
+            an.show_landmarks_stats(sport, start_date, end_date)
+            an.show_state_stats(sport, start_date, end_date)
+            an.show_country_stats(sport, start_date, end_date)
+        elif option == -1:
             quit_menu = True
         else:
             show_invalid_option()
@@ -286,9 +308,13 @@ if __name__ == '__main__':
                     main_menu = True
                 else:
                     process_sport_choice(sport_idx)
-                ############################################
-
         elif option == 2:
+        	where_we_are_now = os.getcwd()
+        	os.chdir('../accesslink-API/')
+        	utils.clear()
+        	os.system('python accesslink_example.py')
+        	os.chdir(where_we_are_now)
+        elif option == 3:
             db = DatabaseBuilder()
             sleep(const.menu_delay)
         elif option == -1:

@@ -35,22 +35,20 @@ class PolarAccessLinkExample(object):
         while self.running:
             print('\nChoose an option:\n' +
                   '-----------------------\n' +
-                  '0) Get all data\n' +
-                  '1) Get user information\n' +
-                  '2) Check available data\n' +
-                  '3) Revoke access token\n' +
-                  '4) Exit\n' +
+                  ' 1 => Get data\n' +
+                  ' 2 => Revoke access token\n' +
+                  '-1 => Exit\n' +
                   '-----------------------')
             self.get_menu_choice()
 
     def get_menu_choice(self):
         choice = input('> ')
         {
-            '0': self.get_all_data,
-            '1': self.get_user_information,
-            '2': self.check_available_data,
-            '3': self.revoke_access_token,
-            '4': self.exit
+            '1': self.get_all_data,
+            # '1': self.get_user_information,
+            # '2': self.check_available_data,
+            '2': self.revoke_access_token,
+            '-1': self.exit
         }.get(choice, self.get_menu_choice)()
 
     def get_all_data(self):

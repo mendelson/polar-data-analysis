@@ -98,10 +98,7 @@ class Analyser(object):
         df.reset_index(inplace=True)
         df.rename(columns={'index': 'i-th session (0 started)'}, inplace=True)
 
-        # Dealing with strings and ints
-        df = df.replace(const.empty_value, 0)
         df = df.sort_values(by='duration', ascending=False, ignore_index=True).head(how_many)
-        df = df.replace(0, const.empty_value)
 
         utils.show_dataframe_in_web(df, f'{how_many} most time consuming sessions')
 
@@ -112,10 +109,7 @@ class Analyser(object):
         df.reset_index(inplace=True)
         df.rename(columns={'index': 'i-th session (0 started)'}, inplace=True)
 
-        # Dealing with strings and ints
-        df = df.replace(const.empty_value, 0)
         df = df.sort_values(by=column, ascending=True, ignore_index=True).head(how_many)
-        df = df.replace(0, const.empty_value)
 
         utils.show_dataframe_in_web(df, f'Best {distance}km time sessions')
 

@@ -1,14 +1,22 @@
 from datetime import datetime
+from os import name
+
+# for windows
+if name == 'nt':
+    slash = '\\'
+# for mac and linux(here, os.name is 'posix') 
+else:
+    slach = '/'
 
 birthday = datetime(1993, 7, 4)
 ever_date = birthday
 
-data_folder = '../data/'
-downloaded_data_folder = 'polar-user-data-export/'
-accesslink_data_folder = 'exercises_data/'
+data_folder = f'..{slash}data{slash}'
+downloaded_data_folder = f'polar-user-data-export{slash}'
+accesslink_data_folder = f'exercises_data{slash}'
 
-out_folder = 'processed_data/'
-out_folder_path = f'../{out_folder}'
+out_folder = f'processed_data{slash}'
+out_folder_path = f'..{slash}{out_folder}'
 
 downloaded_data_path = f'{data_folder}{downloaded_data_folder}'
 accesslink_data_path = f'{data_folder}{accesslink_data_folder}'

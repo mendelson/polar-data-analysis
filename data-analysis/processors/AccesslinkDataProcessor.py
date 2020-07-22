@@ -168,7 +168,7 @@ class AccesslinkDataProcessor(AbstractDataProcessor):
 
         # Checking for no distance recorded
         if 'distance' not in data:
-            filtered['distance'] = 1 # if there is no distance recorded, I'll assume it is 1km
+            filtered['distance'] = const.empty_value
         else:
             filtered['distance'] = utils.get_km(data['distance'])
 

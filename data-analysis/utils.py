@@ -26,11 +26,54 @@ def polar_time_to_python_time(polar_t):
 
 def accesslink_time_to_python_time(accesslink_t):
     new_t = accesslink_t.replace('PT', '')
-    new_t = new_t.replace('S', '')
-    time = new_t.split('M')
-    value = float(time[1])
-    milliseconds = value%1
-    td = timedelta(minutes=int(time[0]), seconds=int(value), milliseconds=milliseconds*1000)
+    new_t = new_t.replace('T', '')
+
+    idx = new_t.find('H')
+    if idx == -1:
+        hours = 0
+    else:
+        i = idx - 1
+        hours = ''
+        while i >= 0:
+            if new_t[i].isnumeric():
+                hours += new_t[i]
+                i -= 1
+            else:
+                break
+        hours = int(hours[::-1])
+        
+    idx = new_t.find('M')
+    if idx == -1:
+        minutes = 0
+    else:
+        i = idx - 1
+        minutes = ''
+        while i >= 0:
+            if new_t[i].isnumeric():
+                minutes += new_t[i]
+                i -= 1
+            else:
+                break
+        minutes = int(minutes[::-1])
+        
+    idx = new_t.find('S')
+    if idx == -1:
+        seconds = 0
+    else:
+        i = idx - 1
+        seconds = ''
+        while i >= 0:
+            if new_t[i].isnumeric() or new_t[i] == '.':
+                seconds += new_t[i]
+                i -= 1
+            else:
+                break
+        seconds = float(seconds[::-1])
+        
+    milliseconds = seconds%1
+    seconds = int(seconds)
+
+    td = timedelta(minutes=hours*60+minutes, seconds=seconds, milliseconds=milliseconds*1000)
 
     return str(td)
 
@@ -78,7 +121,7 @@ def save_json_to_file(data, filename):
         # outfile.write(json.dumps(data, indent=4))
 
 def get_dataframe_from_file(file):
-    return pd.read_json(file, lines=True)
+    return pd.read_json(file, lines=True, convert_dates=False)
 
 def get_age(date):
     date = datetime(int(date[0:4]), int(date[5:7]), int(date[8:10]))
@@ -171,12 +214,22 @@ def convert_tcx_laps_to_downloaded_format(laps):
     samples = []
 
     for lap in laps:
-        for sample in lap['Track']['Trackpoint']:
-            sample_dict = {
-                            'dateTime': format_tcx_datetime_to_downloaded_datetime(sample['Time']),
-                            'value': float(sample['DistanceMeters'])
-                        }
-            samples.append(sample_dict)
+        try:
+            for sample in lap['Track']['Trackpoint']:
+                sample_dict = {
+                                'dateTime': format_tcx_datetime_to_downloaded_datetime(sample['Time']),
+                                'value': float(sample['DistanceMeters'])
+                            }
+                samples.append(sample_dict)
+        # If the session was paused, it is created a list of Tracks instead of just one element
+        except:
+            for pause in lap['Track']:
+                for sample in pause['Trackpoint']:
+                    sample_dict = {
+                                    'dateTime': format_tcx_datetime_to_downloaded_datetime(sample['Time']),
+                                    'value': float(sample['DistanceMeters'])
+                                }
+                    samples.append(sample_dict)
 
     return samples
 

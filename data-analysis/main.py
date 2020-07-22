@@ -310,7 +310,7 @@ if __name__ == '__main__':
                     process_sport_choice(sport_idx)
         elif option == 2:
         	where_we_are_now = os.getcwd()
-        	os.chdir('../accesslink-API/')
+        	os.chdir(f'..{const.slash}accesslink-API{const.slash}')
         	utils.clear()
         	os.system('python accesslink_example.py')
         	os.chdir(where_we_are_now)

@@ -17,11 +17,13 @@ The "data-analysis" folder is the one I have developed from scratch. It deals wi
           ├── processed_data                        # this is where the treated data will be stored after the pre-processing
           └── user_data                             # holds all the user data
 
-I have not uploaded any of my personal data, so feel the folders with your own data. Also, feel free to follow me on [Polar Flow](https://flow.polar.com/training/profiles/3142224) and [Strava](https://www.strava.com/athletes/9485255)
+I have not uploaded any of my personal data, so fill the folders with your own data. Also, feel free to follow me on [Polar Flow](https://flow.polar.com/training/profiles/3142224) and [Strava](https://www.strava.com/athletes/9485255)
 
 If you got everything correctly setup, you should just run
 ```
 python data-analysis\main.py
 ```
+
+or double-click the __data-analysis\RUNME.bat__ file.
 
 Once again: if you are having trouble running this code, feel free to reach me.

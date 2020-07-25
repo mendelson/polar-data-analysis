@@ -88,9 +88,9 @@ class DownloadedDataProcessor(AbstractDataProcessor):
 
         filtered['duration'] = utils.polar_time_to_python_time(data['exercises'][exercise_index]['duration'])
 
-        if has_route:
-        	_, _, _, filtered['has_negative_split'] = utils.get_data_at_dist(filtered['distance'], data['exercises'][0]['samples']['distance'])
-        else:
+        try:
+        	_, _, _, filtered['has_negative_split'] = utils.get_data_at_dist(filtered['distance'], data['exercises'][exercise_index]['samples']['distance'])
+        except:
         	filtered['has_negative_split'] = const.empty_value
 
         filtered['avg_speed'] = utils.round_speed(data['exercises'][exercise_index]['speed']['avg'])
@@ -274,9 +274,9 @@ class DownloadedDataProcessor(AbstractDataProcessor):
 
         filtered['duration'] = utils.polar_time_to_python_time(data['exercises'][exercise_index]['duration'])
 
-        if has_route:
-        	_, _, _, filtered['has_negative_split'] = utils.get_data_at_dist(filtered['distance'], data['exercises'][0]['samples']['distance'])
-        else:
+        try:
+        	_, _, _, filtered['has_negative_split'] = utils.get_data_at_dist(filtered['distance'], data['exercises'][exercise_index]['samples']['distance'])
+        except:
         	filtered['has_negative_split'] = const.empty_value
 
         filtered['avg_speed'] = utils.round_speed(data['exercises'][exercise_index]['speed']['avg'])

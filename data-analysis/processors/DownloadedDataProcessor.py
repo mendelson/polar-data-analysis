@@ -87,6 +87,12 @@ class DownloadedDataProcessor(AbstractDataProcessor):
             filtered['distance'] = utils.get_km(data['exercises'][exercise_index]['distance'])
 
         filtered['duration'] = utils.polar_time_to_python_time(data['exercises'][exercise_index]['duration'])
+
+        if has_route:
+        	_, _, _, filtered['has_negative_split'] = utils.get_data_at_dist(filtered['distance'], data['exercises'][0]['samples']['distance'])
+        else:
+        	filtered['has_negative_split'] = const.empty_value
+
         filtered['avg_speed'] = utils.round_speed(data['exercises'][exercise_index]['speed']['avg'])
         filtered['max_speed'] = utils.round_speed(data['exercises'][exercise_index]['speed']['max'])
 
@@ -118,15 +124,15 @@ class DownloadedDataProcessor(AbstractDataProcessor):
             filtered['max_heart_rate_as_percentage'] = filtered['avg_heart_rate_as_percentage']
         
         if has_route:
-            filtered['5km_time'], filtered['5km_avg_speed'], filtered['5km_avg_pace'] = utils.get_data_at_dist(5, data['exercises'][0]['samples']['distance'])
-            filtered['10km_time'], filtered['10km_avg_speed'], filtered['10km_avg_pace'] = utils.get_data_at_dist(10, data['exercises'][0]['samples']['distance'])
-            filtered['15km_time'], filtered['15km_avg_speed'], filtered['15km_avg_pace'] = utils.get_data_at_dist(15, data['exercises'][0]['samples']['distance'])
-            filtered['21km_time'], filtered['21km_avg_speed'], filtered['21km_avg_pace'] = utils.get_data_at_dist(21, data['exercises'][0]['samples']['distance'])
+            filtered['5km_time'], filtered['5km_avg_speed'], filtered['5km_avg_pace'], filtered['5km_has_negative_split'] = utils.get_data_at_dist(5, data['exercises'][0]['samples']['distance'])
+            filtered['10km_time'], filtered['10km_avg_speed'], filtered['10km_avg_pace'], filtered['10km_has_negative_split'] = utils.get_data_at_dist(10, data['exercises'][0]['samples']['distance'])
+            filtered['15km_time'], filtered['15km_avg_speed'], filtered['15km_avg_pace'], filtered['15km_has_negative_split'] = utils.get_data_at_dist(15, data['exercises'][0]['samples']['distance'])
+            filtered['21km_time'], filtered['21km_avg_speed'], filtered['21km_avg_pace'], filtered['21km_has_negative_split'] = utils.get_data_at_dist(21, data['exercises'][0]['samples']['distance'])
         else:
-            filtered['5km_time'], filtered['5km_avg_speed'], filtered['5km_avg_pace'] = (const.empty_value, const.empty_value, const.empty_value)
-            filtered['10km_time'], filtered['10km_avg_speed'], filtered['10km_avg_pace'] = (const.empty_value, const.empty_value, const.empty_value)
-            filtered['15km_time'], filtered['15km_avg_speed'], filtered['15km_avg_pace'] = (const.empty_value, const.empty_value, const.empty_value)
-            filtered['21km_time'], filtered['21km_avg_speed'], filtered['21km_avg_pace'] = (const.empty_value, const.empty_value, const.empty_value)
+            filtered['5km_time'], filtered['5km_avg_speed'], filtered['5km_avg_pace'], filtered['5km_has_negative_split'] = (const.empty_value, const.empty_value, const.empty_value, const.empty_value)
+            filtered['10km_time'], filtered['10km_avg_speed'], filtered['10km_avg_pace'], filtered['10km_has_negative_split'] = (const.empty_value, const.empty_value, const.empty_value, const.empty_value)
+            filtered['15km_time'], filtered['15km_avg_speed'], filtered['15km_avg_pace'], filtered['15km_has_negative_split'] = (const.empty_value, const.empty_value, const.empty_value, const.empty_value)
+            filtered['21km_time'], filtered['21km_avg_speed'], filtered['21km_avg_pace'], filtered['21km_has_negative_split'] = (const.empty_value, const.empty_value, const.empty_value, const.empty_value)
 
         filtered['day_link'] = utils.get_day_link(filtered['start_time'])
         # utils.pretty_print_json(filtered)
@@ -267,6 +273,12 @@ class DownloadedDataProcessor(AbstractDataProcessor):
             filtered['distance'] = utils.get_km(data['exercises'][exercise_index]['distance'])
 
         filtered['duration'] = utils.polar_time_to_python_time(data['exercises'][exercise_index]['duration'])
+
+        if has_route:
+        	_, _, _, filtered['has_negative_split'] = utils.get_data_at_dist(filtered['distance'], data['exercises'][0]['samples']['distance'])
+        else:
+        	filtered['has_negative_split'] = const.empty_value
+
         filtered['avg_speed'] = utils.round_speed(data['exercises'][exercise_index]['speed']['avg'])
         filtered['max_speed'] = utils.round_speed(data['exercises'][exercise_index]['speed']['max'])
 
@@ -298,15 +310,15 @@ class DownloadedDataProcessor(AbstractDataProcessor):
             filtered['max_heart_rate_as_percentage'] = filtered['avg_heart_rate_as_percentage']
         
         if has_route:
-            filtered['10km_time'], filtered['10km_avg_speed'], filtered['10km_avg_pace'] = utils.get_data_at_dist(10, data['exercises'][0]['samples']['distance'])
-            filtered['30km_time'], filtered['30km_avg_speed'], filtered['30km_avg_pace'] = utils.get_data_at_dist(30, data['exercises'][0]['samples']['distance'])
-            filtered['60km_time'], filtered['60km_avg_speed'], filtered['60km_avg_pace'] = utils.get_data_at_dist(60, data['exercises'][0]['samples']['distance'])
-            filtered['100km_time'], filtered['100km_avg_speed'], filtered['100km_avg_pace'] = utils.get_data_at_dist(100, data['exercises'][0]['samples']['distance'])
+            filtered['10km_time'], filtered['10km_avg_speed'], filtered['10km_avg_pace'], filtered['10km_has_negative_split'] = utils.get_data_at_dist(10, data['exercises'][0]['samples']['distance'])
+            filtered['30km_time'], filtered['30km_avg_speed'], filtered['30km_avg_pace'], filtered['30km_has_negative_split'] = utils.get_data_at_dist(30, data['exercises'][0]['samples']['distance'])
+            filtered['60km_time'], filtered['60km_avg_speed'], filtered['60km_avg_pace'], filtered['60km_has_negative_split'] = utils.get_data_at_dist(60, data['exercises'][0]['samples']['distance'])
+            filtered['100km_time'], filtered['100km_avg_speed'], filtered['100km_avg_pace'], filtered['100km_has_negative_split'] = utils.get_data_at_dist(100, data['exercises'][0]['samples']['distance'])
         else:
-            filtered['10km_time'], filtered['10km_avg_speed'], filtered['10km_avg_pace'] = (const.empty_value, const.empty_value, const.empty_value)
-            filtered['30km_time'], filtered['30km_avg_speed'], filtered['30km_avg_pace'] = (const.empty_value, const.empty_value, const.empty_value)
-            filtered['60km_time'], filtered['60km_avg_speed'], filtered['60km_avg_pace'] = (const.empty_value, const.empty_value, const.empty_value)
-            filtered['100km_time'], filtered['100km_avg_speed'], filtered['100km_avg_pace'] = (const.empty_value, const.empty_value, const.empty_value)
+            filtered['10km_time'], filtered['10km_avg_speed'], filtered['10km_avg_pace'], filtered['10km_has_negative_split'] = (const.empty_value, const.empty_value, const.empty_value, const.empty_value)
+            filtered['30km_time'], filtered['30km_avg_speed'], filtered['30km_avg_pace'], filtered['30km_has_negative_split'] = (const.empty_value, const.empty_value, const.empty_value, const.empty_value)
+            filtered['60km_time'], filtered['60km_avg_speed'], filtered['60km_avg_pace'], filtered['60km_has_negative_split'] = (const.empty_value, const.empty_value, const.empty_value, const.empty_value)
+            filtered['100km_time'], filtered['100km_avg_speed'], filtered['100km_avg_pace'], filtered['100km_has_negative_split'] = (const.empty_value, const.empty_value, const.empty_value, const.empty_value)
 
         filtered['day_link'] = utils.get_day_link(filtered['start_time'])
         # utils.pretty_print_json(filtered)

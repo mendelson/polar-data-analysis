@@ -164,15 +164,14 @@ def get_initial_location(first_route_point, file_id):
 
     return unidecode.unidecode(landmark), unidecode.unidecode(state), unidecode.unidecode(country)
 
-def get_data_at_dist(km, dist_list):
-    m = km*1000
+def get_time_at_dist(m, dist_list):
+    has_distance = False
+    time = None
 
     init_time = dist_list[0]['dateTime']
     init_time = datetime(int(init_time[0:4]), int(init_time[5:7]), int(init_time[8:10]),
                          int(init_time[11:13]), int(init_time[14:16]), int(init_time[17:19]),
                          int(init_time[20:])*1000)
-
-    has_distance = False
 
     for moment in dist_list:
         try:
@@ -188,14 +187,30 @@ def get_data_at_dist(km, dist_list):
         except:
             pass
 
+    return has_distance, time
+
+def get_data_at_dist(km, dist_list):
+    m = km*1000
+
+    has_distance, time = get_time_at_dist(m, dist_list)
+
     if not has_distance:
-        return const.empty_value, const.empty_value, const.empty_value
+        return const.empty_value, const.empty_value, const.empty_value, const.empty_value
+
+    _, first_half_time = get_time_at_dist(m/2, dist_list)
+
+    second_half_time = time - first_half_time
+
+    if second_half_time < first_half_time:
+        has_negative_split = True
+    else:
+        has_negative_split = False
 
     avg_speed = km/(time.seconds/3600)
     avg_pace = 60/avg_speed
     avg_pace = timedelta(minutes=avg_pace)
 
-    return str(time), round_speed(avg_speed), str(avg_pace)
+    return str(time), round_speed(avg_speed), str(avg_pace), str(has_negative_split)
 
 def find_tcx_max_speed(laps):
     max_speed = 0

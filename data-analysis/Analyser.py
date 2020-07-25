@@ -77,6 +77,7 @@ class Analyser(object):
         df = self.get_sessions_in_timespan(df, start_date, end_date)
         df.reset_index(inplace=True)
         df.rename(columns={'index': 'i-th session (0 started)'}, inplace=True)
+        df = df.sort_values(by='start_time', ascending=False, ignore_index=True)
         utils.show_dataframe_in_web(df, 'All sessions')
 
     def show_top_distances(self, sport, how_many, start_date, end_date):

@@ -38,7 +38,8 @@ files = {
 	'spinning': 'SPINNING.json',
 	'swimming': 'SWIMMING.json',
 	'futsal': 'FUTSAL.json',
-	'mobility_static': 'MOBILITY_STATIC.json'
+	'mobility_static': 'MOBILITY_STATIC.json',
+	'mobility_dynamic': 'MOBILITY_DYNAMIC.json'
 }
 
 sport_processor = {
@@ -55,7 +56,8 @@ sport_processor = {
 	'SPINNING': 'distance_based',
 	'SWIMMING': 'distance_based',
 	'FUTSAL': 'distance_based',
-	'MOBILITY_STATIC': 'standard'
+	'MOBILITY_STATIC': 'standard',
+	'MOBILITY_DYNAMIC': 'standard'
 }
 
 

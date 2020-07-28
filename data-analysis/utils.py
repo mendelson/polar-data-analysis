@@ -7,7 +7,12 @@ from geopy.geocoders import Nominatim
 import unidecode
 import tempfile
 import webbrowser
-from os import system, name
+from os import system, name, path
+import csv
+import codecs
+import urllib.request
+import sys
+import pandas as pd
 
 def polar_datetime_to_python_datetime_str(polar_dt):
     new_dt = polar_dt.replace('T', ' ')
@@ -228,6 +233,7 @@ def find_tcx_max_speed(laps):
 def convert_tcx_laps_to_downloaded_format(laps):
     samples = []
 
+    # for lap_idx, lap in enumerate(laps):
     for lap in laps:
         try:
             for sample in lap['Track']['Trackpoint']:
@@ -239,7 +245,15 @@ def convert_tcx_laps_to_downloaded_format(laps):
         # If the session was paused, it is created a list of Tracks instead of just one element
         except:
             for pause in lap['Track']:
-                for sample in pause['Trackpoint']:
+                if type(pause['Trackpoint']) is list:
+                    for sample_idx, sample in enumerate(pause['Trackpoint']):
+                        sample_dict = {
+                                        'dateTime': format_tcx_datetime_to_downloaded_datetime(sample['Time']),
+                                        'value': float(sample['DistanceMeters'])
+                                    }
+                        samples.append(sample_dict)
+                else:
+                    sample = pause['Trackpoint']
                     sample_dict = {
                                     'dateTime': format_tcx_datetime_to_downloaded_datetime(sample['Time']),
                                     'value': float(sample['DistanceMeters'])
@@ -318,3 +332,41 @@ def timedelta_to_duration(tds):
         dates.append(str(td))
 
     return dates
+
+def fahrenheit_to_celsius(fah):
+    fah = float(fah)
+    return ((fah - 32)*5)/9
+
+def get_weather_data_file(first_route_point, file_id):
+    file = f'{const.weather_data_path}{const.weather_file_prefix}{file_id}.csv'
+
+    if not path.exists(file):
+        start_date = datetime.strptime(file_id[0:10], '%Y-%m-%d')
+        end_date = start_date + timedelta(days=1)
+        start_date = start_date.strftime('%Y-%m-%d')
+        end_date = end_date.strftime('%Y-%m-%d')
+
+        URL = f'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/weatherdata/history?goal=history&aggregateHours=1&startDateTime={start_date}T00:00:00&endDateTime={end_date}T00:00:00&contentType=csv&unitGroup=us&locations={first_route_point["latitude"]},{first_route_point["longitude"]}&key={const.weather_key}'
+
+        try:
+            CSVBytes = urllib.request.urlopen(URL)
+            CSVText = csv.reader(codecs.iterdecode(CSVBytes, 'utf-8'))
+
+            is_columns = True
+            idx = 0
+
+            for row in CSVText:
+                if is_columns:
+                    is_columns = False
+                    df = pd.DataFrame(columns=row)
+                else:
+                    df.loc[idx] = row
+                    idx += 1
+
+            df['Minimum Temperature'] = df['Minimum Temperature'].apply(fahrenheit_to_celsius)
+            df['Maximum Temperature'] = df['Maximum Temperature'].apply(fahrenheit_to_celsius)
+            df['Temperature'] = df['Temperature'].apply(fahrenheit_to_celsius)
+
+            df.to_csv(file, index=False)
+        except:
+            pass

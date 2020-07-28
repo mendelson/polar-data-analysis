@@ -77,6 +77,7 @@ class AccesslinkDataProcessor(AbstractDataProcessor):
                                     'latitude': float(tcx_data['TrainingCenterDatabase']['Activities']['Activity']['Lap'][0]['Track']['Trackpoint'][0]['Position']['LatitudeDegrees']),
                                     'longitude': float(tcx_data['TrainingCenterDatabase']['Activities']['Activity']['Lap'][0]['Track']['Trackpoint'][0]['Position']['LongitudeDegrees'])
                                 }
+            utils.get_weather_data_file(first_route_point, self.current_file_id)
             has_route = True
             filtered['landmark'], filtered['state'], filtered['country'] = utils.get_initial_location(first_route_point, filtered['start_time'])
         except:
@@ -170,6 +171,7 @@ class AccesslinkDataProcessor(AbstractDataProcessor):
                                     'latitude': float(tcx_data['TrainingCenterDatabase']['Activities']['Activity']['Lap'][0]['Track']['Trackpoint'][0]['Position']['LatitudeDegrees']),
                                     'longitude': float(tcx_data['TrainingCenterDatabase']['Activities']['Activity']['Lap'][0]['Track']['Trackpoint'][0]['Position']['LongitudeDegrees'])
                                 }
+            utils.get_weather_data_file(first_route_point, self.current_file_id)
             has_route = True
             filtered['landmark'], filtered['state'], filtered['country'] = utils.get_initial_location(first_route_point, filtered['start_time'])
         except:
@@ -235,6 +237,7 @@ class AccesslinkDataProcessor(AbstractDataProcessor):
                                     'latitude': float(tcx_data['TrainingCenterDatabase']['Activities']['Activity']['Lap'][0]['Track']['Trackpoint'][0]['Position']['LatitudeDegrees']),
                                     'longitude': float(tcx_data['TrainingCenterDatabase']['Activities']['Activity']['Lap'][0]['Track']['Trackpoint'][0]['Position']['LongitudeDegrees'])
                                 }
+            utils.get_weather_data_file(first_route_point, self.current_file_id)
             has_route = True
             filtered['landmark'], filtered['state'], filtered['country'] = utils.get_initial_location(first_route_point, filtered['start_time'])
         except:
@@ -309,6 +312,7 @@ class AccesslinkDataProcessor(AbstractDataProcessor):
                                     'latitude': float(tcx_data['TrainingCenterDatabase']['Activities']['Activity']['Lap'][0]['Track']['Trackpoint'][0]['Position']['LatitudeDegrees']),
                                     'longitude': float(tcx_data['TrainingCenterDatabase']['Activities']['Activity']['Lap'][0]['Track']['Trackpoint'][0]['Position']['LongitudeDegrees'])
                                 }
+            utils.get_weather_data_file(first_route_point, self.current_file_id)
             has_route = True
             filtered['landmark'], filtered['state'], filtered['country'] = utils.get_initial_location(first_route_point, filtered['start_time'])
         except:

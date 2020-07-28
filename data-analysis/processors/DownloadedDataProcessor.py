@@ -76,6 +76,7 @@ class DownloadedDataProcessor(AbstractDataProcessor):
         has_route = 'recordedRoute' in data['exercises'][0]['samples']
         if has_route:
             first_route_point = data['exercises'][0]['samples']['recordedRoute'][0]
+            utils.get_weather_data_file(first_route_point, filtered['start_time'])
             filtered['landmark'], filtered['state'], filtered['country'] = utils.get_initial_location(first_route_point, filtered['start_time'])
         else:
             filtered['landmark'], filtered['state'], filtered['country'] = (const.empty_value, const.empty_value, const.empty_value)
@@ -153,6 +154,7 @@ class DownloadedDataProcessor(AbstractDataProcessor):
         has_route = 'recordedRoute' in data['exercises'][0]['samples']
         if has_route:
             first_route_point = data['exercises'][0]['samples']['recordedRoute'][0]
+            utils.get_weather_data_file(first_route_point, filtered['start_time'])
             filtered['landmark'], filtered['state'], filtered['country'] = utils.get_initial_location(first_route_point, filtered['start_time'])
         else:
             filtered['landmark'], filtered['state'], filtered['country'] = (const.empty_value, const.empty_value, const.empty_value)
@@ -201,6 +203,7 @@ class DownloadedDataProcessor(AbstractDataProcessor):
         has_route = 'recordedRoute' in data['exercises'][0]['samples']
         if has_route:
             first_route_point = data['exercises'][0]['samples']['recordedRoute'][0]
+            utils.get_weather_data_file(first_route_point, filtered['start_time'])
             filtered['landmark'], filtered['state'], filtered['country'] = utils.get_initial_location(first_route_point, filtered['start_time'])
         else:
             filtered['landmark'], filtered['state'], filtered['country'] = (const.empty_value, const.empty_value, const.empty_value)
@@ -264,6 +267,7 @@ class DownloadedDataProcessor(AbstractDataProcessor):
         has_route = 'recordedRoute' in data['exercises'][0]['samples']
         if has_route:
             first_route_point = data['exercises'][0]['samples']['recordedRoute'][0]
+            utils.get_weather_data_file(first_route_point, filtered['start_time'])
             filtered['landmark'], filtered['state'], filtered['country'] = utils.get_initial_location(first_route_point, filtered['start_time'])
         else:
             filtered['landmark'], filtered['state'], filtered['country'] = (const.empty_value, const.empty_value, const.empty_value)

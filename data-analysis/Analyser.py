@@ -114,6 +114,18 @@ class Analyser(object):
 
         utils.show_dataframe_in_web(df, f'Best {distance}km time sessions')
 
+    def show_sessions_with_minimum_distance(self, sport, distance, start_date, end_date):
+        df = self.df_dict[sport].copy(deep=False)
+        df = self.get_sessions_in_timespan(df, start_date, end_date)
+        df.reset_index(inplace=True)
+        df.rename(columns={'index': 'i-th session (0 started)'}, inplace=True)
+
+        df = df[df['distance'] >= distance]
+
+        df = df.sort_values(by='start_time', ascending=False, ignore_index=True)
+
+        utils.show_dataframe_in_web(df, f'Sessions with at least {distance}km')
+
     def show_top_avg_speeds(self, sport, how_many, start_date, end_date):
         df = self.df_dict[sport].copy(deep=False)
         df = self.get_sessions_in_timespan(df, start_date, end_date)

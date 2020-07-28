@@ -14,15 +14,18 @@ ever_date = birthday
 data_folder = f'..{slash}data{slash}'
 downloaded_data_folder = f'polar-user-data-export{slash}'
 accesslink_data_folder = f'exercises_data{slash}'
+weather_data_folder = f'weather_data{slash}'
 
 out_folder = f'processed_data{slash}'
 out_folder_path = f'..{slash}{out_folder}'
 
 downloaded_data_path = f'{data_folder}{downloaded_data_folder}'
 accesslink_data_path = f'{data_folder}{accesslink_data_folder}'
+weather_data_path = f'..{slash}{weather_data_folder}'
 
 accesslink_summary_file_prefix = 'summary_data_'
 accesslink_tcx_file_prefix = 'tcx_data_'
+weather_file_prefix = 'weather_data_'
 
 files = {
 	'running': 'RUNNING.json',
@@ -60,6 +63,7 @@ sport_processor = {
 	'MOBILITY_DYNAMIC': 'standard'
 }
 
+weather_key = 'K54U47SZQXEQS6H3A15SXH9DA'
 
 menu_delay = 5
 empty_value = '~~~~~~~~~~'

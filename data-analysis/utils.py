@@ -341,12 +341,13 @@ def get_weather_data_file(first_route_point, file_id):
     file = f'{const.weather_data_path}{const.weather_file_prefix}{file_id}.csv'
 
     if not path.exists(file):
-        start_date = datetime.strptime(file_id[0:10], '%Y-%m-%d')
-        end_date = start_date + timedelta(days=1)
-        start_date = start_date.strftime('%Y-%m-%d')
-        end_date = end_date.strftime('%Y-%m-%d')
+        start_date = datetime.strptime(file_id, '%Y-%m-%d+%H_%M_%S_%f')
+        end_date = start_date + timedelta(hours=13)
+        start_date = start_date - timedelta(hours=12)
+        start_date = start_date.strftime('%Y-%m-%dT%H:%M:%S')
+        end_date = end_date.strftime('%Y-%m-%dT%H:%M:%S')
 
-        URL = f'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/weatherdata/history?goal=history&aggregateHours=1&startDateTime={start_date}T00:00:00&endDateTime={end_date}T00:00:00&contentType=csv&unitGroup=us&locations={first_route_point["latitude"]},{first_route_point["longitude"]}&key={const.weather_key}'
+        URL = f'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/weatherdata/history?goal=history&aggregateHours=1&startDateTime={start_date}&endDateTime={end_date}&contentType=csv&unitGroup=us&locations={first_route_point["latitude"]},{first_route_point["longitude"]}&key={const.weather_key}'
 
         try:
             CSVBytes = urllib.request.urlopen(URL)
@@ -362,11 +363,13 @@ def get_weather_data_file(first_route_point, file_id):
                 else:
                     df.loc[idx] = row
                     idx += 1
+                    
+            # Check if we have the 24-hour data
+            if df.shape[0] == 25:
+                df['Minimum Temperature'] = df['Minimum Temperature'].apply(fahrenheit_to_celsius)
+                df['Maximum Temperature'] = df['Maximum Temperature'].apply(fahrenheit_to_celsius)
+                df['Temperature'] = df['Temperature'].apply(fahrenheit_to_celsius)
 
-            df['Minimum Temperature'] = df['Minimum Temperature'].apply(fahrenheit_to_celsius)
-            df['Maximum Temperature'] = df['Maximum Temperature'].apply(fahrenheit_to_celsius)
-            df['Temperature'] = df['Temperature'].apply(fahrenheit_to_celsius)
-
-            df.to_csv(file, index=False)
+                df.to_csv(file, index=False)
         except:
             pass

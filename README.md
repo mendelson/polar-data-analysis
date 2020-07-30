@@ -15,9 +15,10 @@ The "data-analysis" folder is the one I have developed from scratch. It deals wi
           ├── physical_data                         # holds the physical data acquired from the Accesslink API
           ├── polar-user-data-export                # holds all the data acquired from the download link I mentioned above
           ├── processed_data                        # this is where the treated data will be stored after the pre-processing
-          └── user_data                             # holds all the user data
+          ├── user_data                             # holds all the user data
+          └── weather_data                          # this is where the weather data will be stored
 
-I have not uploaded any of my personal data, so fill the folders with your own data. Also, feel free to follow me on [Polar Flow](https://flow.polar.com/training/profiles/3142224) and [Strava](https://www.strava.com/athletes/9485255)
+I have not uploaded any of my personal data, so fill the folders with your own data. Also, feel free to follow me on [Polar Flow](https://flow.polar.com/training/profiles/3142224), [Strava](https://www.strava.com/athletes/9485255) and [Instagram (@mendi_km)](https://instagram.com/mendi_km).
 
 If you got everything correctly setup, you should just run
 ```

@@ -8,11 +8,11 @@ import unidecode
 import tempfile
 import webbrowser
 from os import system, name, path
-import csv
-import codecs
-import urllib.request
-import sys
-import pandas as pd
+# import csv
+# import codecs
+# import urllib.request
+# import sys
+import requests
 
 def polar_datetime_to_python_datetime_str(polar_dt):
     new_dt = polar_dt.replace('T', ' ')
@@ -333,12 +333,8 @@ def timedelta_to_duration(tds):
 
     return dates
 
-def fahrenheit_to_celsius(fah):
-    fah = float(fah)
-    return ((fah - 32)*5)/9
-
 def get_weather_data_file(first_route_point, file_id):
-    file = f'{const.weather_data_path}{const.weather_file_prefix}{file_id}.csv'
+    file = f'{const.weather_data_path}{const.weather_file_prefix}{file_id}.json'
 
     if not path.exists(file):
         start_date = datetime.strptime(file_id, '%Y-%m-%d+%H_%M_%S_%f')
@@ -347,29 +343,15 @@ def get_weather_data_file(first_route_point, file_id):
         start_date = start_date.strftime('%Y-%m-%dT%H:%M:%S')
         end_date = end_date.strftime('%Y-%m-%dT%H:%M:%S')
 
-        URL = f'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/weatherdata/history?goal=history&aggregateHours=1&startDateTime={start_date}&endDateTime={end_date}&contentType=csv&unitGroup=us&locations={first_route_point["latitude"]},{first_route_point["longitude"]}&key={const.weather_key}'
+        latlong = f'{first_route_point["latitude"]},{first_route_point["longitude"]}'
+
+        # Documentation: https://www.visualcrossing.com/resources/documentation/weather-api/weather-api-documentation/
+        URL = f'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/weatherdata/history?goal=history&aggregateHours=1&startDateTime={start_date}&endDateTime={end_date}&contentType=json&unitGroup=metric&locations={latlong}&key={const.weather_key}'
 
         try:
-            CSVBytes = urllib.request.urlopen(URL)
-            CSVText = csv.reader(codecs.iterdecode(CSVBytes, 'utf-8'))
-
-            is_columns = True
-            idx = 0
-
-            for row in CSVText:
-                if is_columns:
-                    is_columns = False
-                    df = pd.DataFrame(columns=row)
-                else:
-                    df.loc[idx] = row
-                    idx += 1
-                    
-            # Check if we have the 24-hour data
-            if df.shape[0] == 25:
-                df['Minimum Temperature'] = df['Minimum Temperature'].apply(fahrenheit_to_celsius)
-                df['Maximum Temperature'] = df['Maximum Temperature'].apply(fahrenheit_to_celsius)
-                df['Temperature'] = df['Temperature'].apply(fahrenheit_to_celsius)
-
-                df.to_csv(file, index=False)
+            data = requests.get(URL).json()
+            if len(data['locations'][latlong]['values']) == 25:
+                with open(file, 'w') as outfile:
+                    outfile.write(json.dumps(data, indent=4))
         except:
             pass

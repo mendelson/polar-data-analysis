@@ -268,4 +268,4 @@ class Analyser(object):
             if distance != const.empty_value:
                 total_distance += distance
 
-        print(f'Total distance: {total_distance} km')
+        print('Total distance: {:.2f} km'.format(round(total_distance, 2)))

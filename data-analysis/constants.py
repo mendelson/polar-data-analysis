@@ -68,3 +68,5 @@ weather_key = 'K54U47SZQXEQS6H3A15SXH9DA'
 menu_delay = 5
 empty_value = '~~~~~~~~~~'
 day_link = 'https://flow.polar.com/training/day/'
+
+show_weather_quota_exceeded_message = True

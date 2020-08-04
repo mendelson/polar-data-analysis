@@ -368,9 +368,14 @@ def get_weather_data_file(first_route_point, file_id):
             # if df.shape[0] == 25:
             #     df.to_csv(file, index=False)
             data = requests.get(URL).json()
-            if len(data['locations'][latlong]['values']) == 25:
+            if 'locations' in data.keys() and len(data['locations'][latlong]['values']) == 25:
                 with open(file, 'w') as outfile:
                     outfile.write(json.dumps(data, indent=4))
+            elif 'You have exceeded the maximum number of daily query results for your account.' in data['message']:
+                if const.show_weather_quota_exceeded_message == True:
+                    print('=> Daily quota for historical weather data exceeded!')
+                    const.show_weather_quota_exceeded_message = False
+                    
         except Exception as e:
             print('Deu exceção!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
             print(e)

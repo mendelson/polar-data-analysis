@@ -34,15 +34,15 @@ class Analyser(object):
     def __order_dict(self, input_dict):
         return {k: v for k, v in sorted(input_dict.items(), key=lambda item: item[1], reverse=True)}
 
-    def show_all_counts(self):
-        ordered_dict = self.__order_dict(self.counts)
-        fig = px.bar(x=list(ordered_dict.keys()), y=list(ordered_dict.values()))
-        fig.update_layout(title_text='Sports count since ever',
-                            xaxis_title='Sport',
-                            yaxis_title='# of sessions')
-        plot(fig)
+    # def show_all_counts(self):
+    #     ordered_dict = self.__order_dict(self.counts)
+    #     fig = px.bar(x=list(ordered_dict.keys()), y=list(ordered_dict.values()))
+    #     fig.update_layout(title_text='Sports count since ever',
+    #                         xaxis_title='Sport',
+    #                         yaxis_title='# of sessions')
+    #     plot(fig)
 
-    def show_all_counts_in_interval(self, start_date, end_date):
+    def show_counts(self, start_date, end_date):
         counts = {}
 
         for sport in self.df_dict.keys():
@@ -58,6 +58,26 @@ class Analyser(object):
         fig.update_layout(title_text=f'Sports count between {start_date} and {end_date} (all inclusive)',
                             xaxis_title='Sport',
                             yaxis_title='# of sessions')
+        plot(fig)
+
+    def show_distances(self, start_date, end_date):
+        distances = {}
+
+        for sport in self.df_dict.keys():
+            distances[sport] = 0
+            for _, row in self.df_dict[sport].iterrows():
+                date = row['start_time']
+                date = datetime.strptime(date, '%Y-%m-%d+%H_%M_%S_%f')
+                if date >= start_date and date <= end_date:
+                    distance = row['distance']
+                    if distance != const.empty_value:
+                        distances[sport] += distance
+
+        ordered_dict = self.__order_dict(distances)
+        fig = px.bar(x=list(ordered_dict.keys()), y=list(ordered_dict.values()))
+        fig.update_layout(title_text=f'Total distances between {start_date} and {end_date} (all inclusive)',
+                            xaxis_title='Sport',
+                            yaxis_title='Distance in km')
         plot(fig)
 
     def get_sessions_in_timespan(self, df, start_date, end_date):
@@ -235,3 +255,17 @@ class Analyser(object):
         df['duration'] = utils.timedelta_to_duration(df['duration'])
 
         utils.show_dataframe_in_web(df, f'Country stats for {sport}')
+
+    def show_total_distance(self, sport, start_date, end_date):
+        df = self.df_dict[sport].copy(deep=False)
+        df = self.get_sessions_in_timespan(df, start_date, end_date)
+        df.reset_index(inplace=True)
+
+        total_distance = 0
+
+        for idx, row in df.iterrows():
+            distance = row['distance']
+            if distance != const.empty_value:
+                total_distance += distance
+
+        print(f'Total distance: {total_distance} km')

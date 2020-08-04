@@ -80,20 +80,23 @@ def ask_for_timespan():
 
 def sessions_count_menu():
     quit_menu = False
+    start_date, end_date = ask_for_timespan()
+    if start_date == 'quit':
+        quit_menu = True
+
     while not quit_menu:
         utils.clear()
         print('Choose an option:')
-        print(' 1 => Get sessions count since the beginning')
-        print(' 2 => Get sessions count in time interval')
+        print(' 1 => Get sessions count')
+        print(' 2 => Get sessions distances')
         print('---------------')
         print('-1 => Go back')
         option = int(input('> '))
 
         if option == 1:
-            an.show_all_counts()
+            an.show_counts(start_date, end_date)
         elif option == 2:
-            start_date, end_date = define_timespan()
-            an.show_all_counts_in_interval(start_date, end_date)
+            an.show_distances(start_date, end_date)
         elif option == -1:
             quit_menu = True
         else:
@@ -119,6 +122,7 @@ def running_menu(sport):
         print(' 5 => Get highest average speeds')
         print(' 6 => Get highest average heart rates')
         print(' 7 => Get location stats')
+        print(' 8 => Get total distance')
         print('---------------')
         print('-1 => Go back')
         option = int(input('> '))
@@ -148,6 +152,9 @@ def running_menu(sport):
             an.show_landmarks_stats(sport, start_date, end_date)
             an.show_state_stats(sport, start_date, end_date)
             an.show_country_stats(sport, start_date, end_date)
+        elif option == 8:
+            an.show_total_distance(sport, start_date, end_date)
+            sleep(const.menu_delay)
         elif option == -1:
             quit_menu = True
         else:
@@ -209,6 +216,7 @@ def distance_based_sport_menu(sport):
         print(' 4 => Get highest average speeds')
         print(' 5 => Get highest average heart rates')
         print(' 6 => Get location stats')
+        print(' 7 => Get total distance')
         print('---------------')
         print('-1 => Go back')
         option = int(input('> '))
@@ -234,6 +242,9 @@ def distance_based_sport_menu(sport):
             an.show_landmarks_stats(sport, start_date, end_date)
             an.show_state_stats(sport, start_date, end_date)
             an.show_country_stats(sport, start_date, end_date)
+        elif option == 7:
+            an.show_total_distance(sport, start_date, end_date)
+            sleep(const.menu_delay)
         elif option == -1:
             quit_menu = True
         else:
@@ -259,6 +270,7 @@ def cycling_menu(sport):
         print(' 5 => Get highest average speeds')
         print(' 6 => Get highest average heart rates')
         print(' 7 => Get location stats')
+        print(' 8 => Get total distance')
         print('---------------')
         print('-1 => Go back')
         option = int(input('> '))
@@ -288,6 +300,9 @@ def cycling_menu(sport):
             an.show_landmarks_stats(sport, start_date, end_date)
             an.show_state_stats(sport, start_date, end_date)
             an.show_country_stats(sport, start_date, end_date)
+        elif option == 8:
+            an.show_total_distance(sport, start_date, end_date)
+            sleep(const.menu_delay)
         elif option == -1:
             quit_menu = True
         else:

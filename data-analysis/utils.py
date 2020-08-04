@@ -8,10 +8,11 @@ import unidecode
 import tempfile
 import webbrowser
 from os import system, name, path
-# import csv
-# import codecs
-# import urllib.request
-# import sys
+
+import csv
+import codecs
+import urllib.request
+
 import requests
 
 def polar_datetime_to_python_datetime_str(polar_dt):
@@ -349,9 +350,29 @@ def get_weather_data_file(first_route_point, file_id):
         URL = f'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/weatherdata/history?goal=history&aggregateHours=1&startDateTime={start_date}&endDateTime={end_date}&contentType=json&unitGroup=metric&locations={latlong}&key={const.weather_key}'
 
         try:
+            # CSVBytes = urllib.request.urlopen(URL)
+            # CSVText = csv.reader(codecs.iterdecode(CSVBytes, 'utf-8'))
+
+            # is_columns = True
+            # idx = 0
+
+            # for row in CSVText:
+            #     if is_columns:
+            #         is_columns = False
+            #         df = pd.DataFrame(columns=row)
+            #     else:
+            #         df.loc[idx] = row
+            #         idx += 1
+
+            # # Check if we have 24-hour data
+            # if df.shape[0] == 25:
+            #     df.to_csv(file, index=False)
             data = requests.get(URL).json()
             if len(data['locations'][latlong]['values']) == 25:
                 with open(file, 'w') as outfile:
                     outfile.write(json.dumps(data, indent=4))
-        except:
+        except Exception as e:
+            print('Deu exceção!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            print(e)
+            input()
             pass

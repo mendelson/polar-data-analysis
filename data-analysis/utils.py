@@ -335,40 +335,79 @@ def timedelta_to_duration(tds):
     return dates
 
 def get_weather_data_file(first_route_point, file_id):
-    file = f'{const.weather_data_path}{const.weather_file_prefix}{file_id}.json'
+    start_date = datetime.strptime(file_id, '%Y-%m-%d+%H_%M_%S_%f')
+    now = datetime.now()
+    seconds_in_day = 24*60*60
+
+    # Check if session happened more than 24 hours ago
+    if (now - start_date).total_seconds() > seconds_in_day:
+        get_csv_weather_data(first_route_point, file_id)
+        get_json_weather_data(first_route_point, file_id)
+
+def get_csv_weather_data(first_route_point, file_id):
+    file = f'{const.weather_data_path}{const.weather_file_prefix}{file_id}.csv'
 
     if not path.exists(file):
         start_date = datetime.strptime(file_id, '%Y-%m-%d+%H_%M_%S_%f')
-        end_date = start_date + timedelta(hours=13)
+        end_date = start_date + timedelta(hours=12)
         start_date = start_date - timedelta(hours=12)
         start_date = start_date.strftime('%Y-%m-%dT%H:%M:%S')
         end_date = end_date.strftime('%Y-%m-%dT%H:%M:%S')
 
         latlong = f'{first_route_point["latitude"]},{first_route_point["longitude"]}'
 
+
+        # Documentation: https://www.visualcrossing.com/resources/documentation/weather-api/weather-api-documentation/
+        URL = f'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/weatherdata/history?goal=history&aggregateHours=1&startDateTime={start_date}&endDateTime={end_date}&contentType=csv&unitGroup=metric&locations={latlong}&key={const.weather_key}'
+
+        try:
+            CSVBytes = urllib.request.urlopen(URL)
+            CSVText = csv.reader(codecs.iterdecode(CSVBytes, 'utf-8'))
+
+            is_columns = True
+            idx = 0
+
+            for row in CSVText:
+                if is_columns:
+                    is_columns = False
+                    df = pd.DataFrame(columns=row)
+                else:
+                    df.loc[idx] = row
+                    idx += 1
+            # print(df)
+            # print(df.shape)
+            # input()
+            if df.shape[0] >= 2:
+                df.to_csv(file, index=False)
+                    
+        # except Exception as e:
+        except:
+            # print('Deu exceção no csv!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            # print(e)
+            # print(df)
+            # print(df.shape)
+            # input()
+            pass
+
+def get_json_weather_data(first_route_point, file_id):
+    file = f'{const.weather_data_path}{const.weather_file_prefix}{file_id}.json'
+
+    if not path.exists(file):
+        start_date = datetime.strptime(file_id, '%Y-%m-%d+%H_%M_%S_%f')
+        end_date = start_date + timedelta(hours=12)
+        start_date = start_date - timedelta(hours=12)
+        start_date = start_date.strftime('%Y-%m-%dT%H:%M:%S')
+        end_date = end_date.strftime('%Y-%m-%dT%H:%M:%S')
+
+        latlong = f'{first_route_point["latitude"]},{first_route_point["longitude"]}'
+
+
         # Documentation: https://www.visualcrossing.com/resources/documentation/weather-api/weather-api-documentation/
         URL = f'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/weatherdata/history?goal=history&aggregateHours=1&startDateTime={start_date}&endDateTime={end_date}&contentType=json&unitGroup=metric&locations={latlong}&key={const.weather_key}'
 
         try:
-            # CSVBytes = urllib.request.urlopen(URL)
-            # CSVText = csv.reader(codecs.iterdecode(CSVBytes, 'utf-8'))
-
-            # is_columns = True
-            # idx = 0
-
-            # for row in CSVText:
-            #     if is_columns:
-            #         is_columns = False
-            #         df = pd.DataFrame(columns=row)
-            #     else:
-            #         df.loc[idx] = row
-            #         idx += 1
-
-            # # Check if we have 24-hour data
-            # if df.shape[0] == 25:
-            #     df.to_csv(file, index=False)
             data = requests.get(URL).json()
-            if 'locations' in data.keys() and len(data['locations'][latlong]['values']) == 25:
+            if 'locations' in data.keys() and len(data['locations'][latlong]['values']) >= 1:
                 with open(file, 'w') as outfile:
                     outfile.write(json.dumps(data, indent=4))
             elif 'You have exceeded the maximum number of daily query results for your account.' in data['message']:
@@ -376,8 +415,13 @@ def get_weather_data_file(first_route_point, file_id):
                     print('=> Daily quota for historical weather data exceeded!')
                     const.show_weather_quota_exceeded_message = False
                     
-        except Exception as e:
-            print('Deu exceção!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            print(e)
-            input()
+        # except Exception as e:
+        except:
+            # print('Deu exceção no json!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            # print(e)
+            # print(data)
+            # print(len(data['locations'][latlong]['values']))
+            # print(file)
+            # print(latlong)
+            # input()
             pass

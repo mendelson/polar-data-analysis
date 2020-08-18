@@ -63,7 +63,10 @@ sport_processor = {
 	'MOBILITY_DYNAMIC': 'standard'
 }
 
+# Essa primeira é a principal
 weather_key = 'K54U47SZQXEQS6H3A15SXH9DA'
+# weather_key = 'QGEYF1INFVV42GW5R1CSA5Y95'
+# weather_key = 'MU9RNLWDPJ55MP24GTLXDXUXV'
 
 menu_delay = 5
 empty_value = '~~~~~~~~~~'

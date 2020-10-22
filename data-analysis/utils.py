@@ -193,6 +193,11 @@ def get_time_at_dist(m, dist_list):
         except:
             pass
 
+    # print(m)
+    # print(has_distance)
+    # print(time)
+    # input()
+
     return has_distance, time
 
 def get_data_at_dist(km, dist_list):
@@ -201,6 +206,8 @@ def get_data_at_dist(km, dist_list):
     has_distance, time = get_time_at_dist(m, dist_list)
 
     if not has_distance:
+        # print('não achou!')
+        # input()
         return const.empty_value, const.empty_value, const.empty_value, const.empty_value
 
     _, first_half_time = get_time_at_dist(m/2, dist_list)
@@ -235,7 +242,7 @@ def convert_tcx_laps_to_downloaded_format(laps):
     samples = []
 
     # for lap_idx, lap in enumerate(laps):
-    for lap in laps:
+    for idx, lap in enumerate(laps):
         try:
             for sample in lap['Track']['Trackpoint']:
                 sample_dict = {
@@ -246,20 +253,26 @@ def convert_tcx_laps_to_downloaded_format(laps):
         # If the session was paused, it is created a list of Tracks instead of just one element
         except:
             for pause in lap['Track']:
-                if type(pause['Trackpoint']) is list:
-                    for sample_idx, sample in enumerate(pause['Trackpoint']):
+                try:
+                    if type(pause['Trackpoint']) is list:
+                        for sample_idx, sample in enumerate(pause['Trackpoint']):
+                            try:
+                                sample_dict = {
+                                            'dateTime': format_tcx_datetime_to_downloaded_datetime(sample['Time']),
+                                            'value': float(sample['DistanceMeters'])
+                                        }
+                                samples.append(sample_dict)
+                            except:
+                                pass
+                    else:
+                        sample = pause['Trackpoint']
                         sample_dict = {
                                         'dateTime': format_tcx_datetime_to_downloaded_datetime(sample['Time']),
                                         'value': float(sample['DistanceMeters'])
                                     }
                         samples.append(sample_dict)
-                else:
-                    sample = pause['Trackpoint']
-                    sample_dict = {
-                                    'dateTime': format_tcx_datetime_to_downloaded_datetime(sample['Time']),
-                                    'value': float(sample['DistanceMeters'])
-                                }
-                    samples.append(sample_dict)
+                except:
+                    pass
 
     return samples
 

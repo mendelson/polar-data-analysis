@@ -73,10 +73,21 @@ class AccesslinkDataProcessor(AbstractDataProcessor):
         has_route = False
         # if has_route:
         try:
-            first_route_point = {
-                                    'latitude': float(tcx_data['TrainingCenterDatabase']['Activities']['Activity']['Lap'][0]['Track']['Trackpoint'][0]['Position']['LatitudeDegrees']),
-                                    'longitude': float(tcx_data['TrainingCenterDatabase']['Activities']['Activity']['Lap'][0]['Track']['Trackpoint'][0]['Position']['LongitudeDegrees'])
-                                }
+            # Try to find the starting point in the first 10 positions
+            got_starting_point = False
+            for i in range(10):
+                try:
+                    first_route_point = {
+                                            'latitude': float(tcx_data['TrainingCenterDatabase']['Activities']['Activity']['Lap'][0]['Track']['Trackpoint'][i]['Position']['LatitudeDegrees']),
+                                            'longitude': float(tcx_data['TrainingCenterDatabase']['Activities']['Activity']['Lap'][0]['Track']['Trackpoint'][i]['Position']['LongitudeDegrees'])
+                                        }
+                    got_starting_point = True
+                    break
+                except:
+                    pass
+
+            if got_starting_point == False:
+                raise Exception('Could not find starting point. Trying a different data format.')
 
             utils.get_weather_data_file(first_route_point, self.current_file_id)
             has_route = True

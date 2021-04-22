@@ -168,6 +168,13 @@ def get_initial_location(first_route_point, file_id):
     state = location.raw['address']['state']
     country = location.raw['address']['country']
 
+    landmark = landmark.replace('"', ' ')
+    landmark = landmark.replace("'", " ")
+    state = state.replace('"', ' ')
+    state = state.replace("'", " ")
+    country = country.replace('"', ' ')
+    country = country.replace("'", " ")
+
     return unidecode.unidecode(landmark), unidecode.unidecode(state), unidecode.unidecode(country)
 
 def get_time_at_dist(m, dist_list):

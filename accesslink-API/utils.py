@@ -28,7 +28,10 @@ def save_json_to_file(data, filename):
 
 def polar_datetime_to_python_datetime_str(polar_dt):
     new_dt = polar_dt.replace('T', ' ')
-    date_time_obj = datetime.strptime(new_dt, '%Y-%m-%d %H:%M:%S.%f')
+    try:
+        date_time_obj = datetime.strptime(new_dt, '%Y-%m-%d %H:%M:%S.%f')
+    except:
+        date_time_obj = datetime.strptime(new_dt, '%Y-%m-%d %H:%M:%S')
     
     return date_time_obj.strftime('%Y-%m-%d+%H_%M_%S_%f')
 
